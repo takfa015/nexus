@@ -91,8 +91,8 @@ const navItems = [
   { id: 'TRANSMISSION', label: '03. TRANSMISSION' }
 ];
 
-const API_KEY = 'AIzaSyCzpiDqaWuuf7W5If4e9Afj5FedbBzMb2g';
-const FOLDER_ID = '1bBhjZWocm3Zg0UXLG0MCWzxlFF_oX09b';
+const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_DRIVE_API_KEY || '';
+const FOLDER_ID = process.env.NEXT_PUBLIC_GOOGLE_DRIVE_FOLDER_ID || '';
 
 async function fetchDriveFolder(folderId: string) {
   try {
@@ -1044,19 +1044,13 @@ export default function NexusPortfolio() {
         </motion.button>
 
         {/* Central Zone (Content) */}
+        {/* Central Zone (Content) - DESKTOP UNIQUEMENT */}
         <div className="hidden md:flex flex-1 flex-col justify-center pl-8 lg:pl-16 pointer-events-none" style={{ perspective: 1000 }}>
           <AnimatePresence mode="wait">
-            
+
             {/* HOME SECTION */}
             {activeSection === 'HOME' && (
-              <motion.div 
-                key="HOME" 
-                variants={sectionVariants} 
-                initial="hidden" 
-                animate="visible" 
-                exit="exit" 
-                className="max-w-4xl pointer-events-auto"
-              >
+              <motion.div key="HOME" variants={sectionVariants} initial="hidden" animate="visible" exit="exit" className="max-w-4xl pointer-events-auto">
                 <TiltCard>
                   <h1 className="mb-6 font-sans text-5xl lg:text-7xl font-bold tracking-widest text-white drop-shadow-[0_0_10px_rgba(0,209,255,0.8)] leading-tight uppercase">
                     SI FODIL TAKFARINAS
@@ -1076,56 +1070,23 @@ export default function NexusPortfolio() {
               </motion.div>
             )}
 
-            {/* PROJETS SECTION is handled via 3D Scrollytelling in the Canvas */}
+            {/* PROJETS SECTION */}
             {activeSection === 'PROJETS' && (
-              <ProjectsUI 
-                contents={currentContents} 
-                isSyncing={isSyncing} 
-                currentFolderName={currentFolderName}
-                isRoot={currentFolderId === FOLDER_ID}
-                onFolderClick={handleFolderClick}
-                onBackClick={handleBackClick}
-                playHover={playHover} 
-                playClick={playClick} 
-                playTransition={playTransition} 
-              />
+              <ProjectsUI contents={currentContents} isSyncing={isSyncing} currentFolderName={currentFolderName} isRoot={currentFolderId === FOLDER_ID} onFolderClick={handleFolderClick} onBackClick={handleBackClick} playHover={playHover} playClick={playClick} playTransition={playTransition} />
             )}
 
             {/* COMPETENCES SECTION */}
             {activeSection === 'COMPETENCES' && (
-              <motion.div 
-                key="COMPETENCES" 
-                variants={sectionVariants} 
-                initial="hidden" 
-                animate="visible" 
-                exit="exit" 
-                className="w-full h-full max-h-[80vh] pointer-events-auto flex flex-col gap-6 overflow-y-auto pr-4 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#00d1ff]/30 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#00d1ff]/80"
-              >
-                <h2 className="font-mono text-2xl text-white mb-2 drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] shrink-0">
-                  BASE DE DONNÉES // COMPÉTENCES & PARCOURS
-                </h2>
-                
-                <motion.div
-                  variants={listVariants}
-                  initial="hidden"
-                  animate="visible"
-                  className="flex flex-col gap-6 pb-8"
-                >
+              <motion.div key="COMPETENCES" variants={sectionVariants} initial="hidden" animate="visible" exit="exit" className="w-full h-full max-h-[80vh] pointer-events-auto flex flex-col gap-6 overflow-y-auto pr-4 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#00d1ff]/30 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#00d1ff]/80">
+                <h2 className="font-mono text-2xl text-white mb-2 drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] shrink-0">BASE DE DONNÉES // COMPÉTENCES & PARCOURS</h2>
+                <motion.div variants={listVariants} initial="hidden" animate="visible" className="flex flex-col gap-6 pb-8">
                   {skillsData.map((category) => {
                     const Icon = category.icon;
                     return (
-                      <motion.div
-                        key={category.id}
-                        variants={cardVariants}
-                        className="group rounded-xl border border-white/10 bg-black/40 p-6 backdrop-blur-md transition-all duration-500 hover:border-[#00d1ff]/50 hover:bg-black/60 hover:shadow-[0_0_15px_rgba(0,209,255,0.15)]"
-                      >
+                      <motion.div key={category.id} variants={cardVariants} className="group rounded-xl border border-white/10 bg-black/40 p-6 backdrop-blur-md transition-all duration-500 hover:border-[#00d1ff]/50 hover:bg-black/60 hover:shadow-[0_0_15px_rgba(0,209,255,0.15)]">
                         <div className="flex items-center gap-4 mb-4">
-                          <div className="p-2 rounded-lg bg-white/5 text-[#00d1ff] group-hover:bg-[#00d1ff]/20 group-hover:shadow-[0_0_10px_rgba(0,209,255,0.5)] transition-all duration-300">
-                            <Icon size={24} />
-                          </div>
-                          <h3 className="font-mono text-lg font-bold text-white tracking-wider transition-all duration-300 group-hover:text-[#00d1ff] group-hover:drop-shadow-[0_0_8px_rgba(0,209,255,0.8)]">
-                            {category.title}
-                          </h3>
+                          <div className="p-2 rounded-lg bg-white/5 text-[#00d1ff] group-hover:bg-[#00d1ff]/20 transition-all duration-300"><Icon size={24} /></div>
+                          <h3 className="font-mono text-lg font-bold text-white tracking-wider group-hover:text-[#00d1ff] transition-all duration-300">{category.title}</h3>
                         </div>
                         <ul className="flex flex-col gap-3 pl-2">
                           {category.items.map((item, idx) => (
@@ -1142,17 +1103,11 @@ export default function NexusPortfolio() {
                     );
                   })}
                 </motion.div>
-
-                {/* TECHNOLOGIES_LOG Section */}
                 <motion.div variants={cardVariants} className="mt-4 pb-12">
-                  <h3 className="font-mono text-xl text-white mb-6 drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]">
-                    TECHNOLOGIES_LOG //
-                  </h3>
+                  <h3 className="font-mono text-xl text-white mb-6">TECHNOLOGIES_LOG //</h3>
                   <div className="flex flex-wrap gap-3">
                     {['Python', 'Next.js', 'Tailwind CSS', 'Firebase', 'AI Video Generation (Runway/Luma)', 'Prompt Engineering', 'Office 365'].map((tech, idx) => (
-                      <span key={idx} className="font-mono text-xs text-gray-300 border border-white/20 bg-black/40 px-4 py-2 rounded-sm transition-all duration-300 hover:border-[#00d1ff]/80 hover:text-[#00d1ff] hover:shadow-[0_0_10px_rgba(0,209,255,0.5)] cursor-default">
-                        {tech}
-                      </span>
+                      <span key={idx} className="font-mono text-xs text-gray-300 border border-white/20 bg-black/40 px-4 py-2 rounded-sm transition-all duration-300 hover:border-[#00d1ff]/80 hover:text-[#00d1ff] cursor-default">{tech}</span>
                     ))}
                   </div>
                 </motion.div>
@@ -1161,34 +1116,15 @@ export default function NexusPortfolio() {
 
             {/* TRANSMISSION SECTION */}
             {activeSection === 'TRANSMISSION' && (
-              <motion.div 
-                key="TRANSMISSION" 
-                variants={sectionVariants} 
-                initial="hidden" 
-                animate="visible" 
-                exit="exit" 
-                className="w-full max-w-2xl pointer-events-auto rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-xl relative overflow-hidden"
-              >
-                {/* Decorative corner accents */}
+              <motion.div key="TRANSMISSION" variants={sectionVariants} initial="hidden" animate="visible" exit="exit" className="w-full max-w-2xl pointer-events-auto rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-xl relative overflow-hidden">
                 <div className="absolute top-0 left-0 h-8 w-8 border-t-2 border-l-2 border-[#00d1ff]/50" />
                 <div className="absolute bottom-0 right-0 h-8 w-8 border-b-2 border-r-2 border-[#00d1ff]/50" />
-                
-                <h2 className="font-mono text-2xl text-white mb-6 drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]">
-                  CANAL DE TRANSMISSION
-                </h2>
-                
+                <h2 className="font-mono text-2xl text-white mb-6">CANAL DE TRANSMISSION</h2>
                 <div className="mb-8 flex flex-col gap-4 font-mono text-sm text-gray-300">
-                  <a href="https://wa.me/213776371454" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-[#00d1ff] transition-colors w-fit">
-                    <MessageCircle size={18} className="text-[#00d1ff]"/> +213 776 37 14 54
-                  </a>
-                  <a href="mailto:sif.takfa@gmail.com" className="flex items-center gap-3 hover:text-[#00d1ff] transition-colors w-fit">
-                    <Mail size={18} className="text-[#00d1ff]"/> sif.takfa@gmail.com
-                  </a>
-                  <a href="https://instagram.com/Takfa015" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-[#00d1ff] transition-colors w-fit">
-                    <Instagram size={18} className="text-[#00d1ff]"/> @Takfa015
-                  </a>
+                  <a href="https://wa.me/213776371454" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-[#00d1ff] transition-colors w-fit"><MessageCircle size={18} className="text-[#00d1ff]"/> +213 776 37 14 54</a>
+                  <a href="mailto:sif.takfa@gmail.com" className="flex items-center gap-3 hover:text-[#00d1ff] transition-colors w-fit"><Mail size={18} className="text-[#00d1ff]"/> sif.takfa@gmail.com</a>
+                  <a href="https://instagram.com/Takfa015" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-[#00d1ff] transition-colors w-fit"><Instagram size={18} className="text-[#00d1ff]"/> @Takfa015</a>
                 </div>
-
                 <form className="flex flex-col gap-6" onSubmit={(e) => e.preventDefault()}>
                   <div className="relative">
                     <input type="text" placeholder="IDENTIFIANT (Nom)" className="peer w-full rounded-none border-b border-white/20 bg-transparent py-3 font-mono text-sm text-white placeholder-transparent focus:border-[#00d1ff] focus:outline-none focus:ring-0 transition-colors" />
@@ -1202,11 +1138,7 @@ export default function NexusPortfolio() {
                     <textarea placeholder="MESSAGE_PAYLOAD" rows={4} className="peer w-full rounded-none border-b border-white/20 bg-transparent py-3 font-mono text-sm text-white placeholder-transparent focus:border-[#00d1ff] focus:outline-none focus:ring-0 transition-colors resize-none" />
                     <label className="absolute left-0 -top-3.5 font-mono text-[10px] text-[#00d1ff] transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-500 peer-focus:-top-3.5 peer-focus:text-[10px] peer-focus:text-[#00d1ff]">MESSAGE_PAYLOAD</label>
                   </div>
-                  <button 
-                    onMouseEnter={playHover}
-                    onClick={playClick}
-                    className="group relative mt-6 overflow-hidden border border-[#00d1ff]/50 bg-[#00d1ff]/10 py-4 font-mono text-sm tracking-widest text-[#00d1ff] transition-all hover:bg-[#00d1ff]/20 hover:shadow-[0_0_20px_rgba(0,209,255,0.6)]"
-                  >
+                  <button onMouseEnter={playHover} onClick={playClick} className="group relative mt-6 overflow-hidden border border-[#00d1ff]/50 bg-[#00d1ff]/10 py-4 font-mono text-sm tracking-widest text-[#00d1ff] transition-all hover:bg-[#00d1ff]/20 hover:shadow-[0_0_20px_rgba(0,209,255,0.6)]">
                     <span className="relative z-10">INITIALISER LE TRANSFERT</span>
                     <div className="absolute inset-0 h-full w-0 bg-[#00d1ff]/20 transition-all duration-300 ease-out group-hover:w-full" />
                   </button>
@@ -1217,6 +1149,160 @@ export default function NexusPortfolio() {
           </AnimatePresence>
         </div>
       </motion.div>
+
+      {/* ===================================================== */}
+      {/* MOBILE LAYOUT — visible uniquement en dessous de md   */}
+      {/* ===================================================== */}
+      <AnimatePresence>
+        {isBooted && (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="md:hidden fixed inset-0 z-30 overflow-y-auto pointer-events-auto"
+          >
+            {/* Barre de navigation mobile sticky */}
+            <div className="sticky top-0 z-50 flex items-center justify-between px-4 py-3 bg-black/85 backdrop-blur-md border-b border-[#00d1ff]/20">
+              <span className="font-mono text-xs text-[#00d1ff] tracking-widest">NEXUS_OS</span>
+              <div className="flex items-center gap-1">
+                {navItems.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => { playClick(); setActiveSection(item.id); }}
+                    className={`px-2 py-1 font-mono text-[9px] tracking-widest rounded transition-all ${
+                      activeSection === item.id
+                        ? 'bg-[#00d1ff]/20 text-[#00d1ff] border border-[#00d1ff]/60'
+                        : 'text-gray-400 border border-transparent'
+                    }`}
+                  >
+                    {item.id}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Contenu des sections */}
+            <div className="px-4 pt-6 pb-32 min-h-screen">
+              <AnimatePresence mode="wait">
+
+                {/* HOME MOBILE */}
+                {activeSection === 'HOME' && (
+                  <motion.div key="HOME-mobile" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.4 }} className="flex flex-col gap-5 pt-2">
+                    <h1 className="font-sans text-3xl font-bold tracking-widest text-white drop-shadow-[0_0_10px_rgba(0,209,255,0.8)] leading-tight uppercase">
+                      SI FODIL<br />TAKFARINAS
+                    </h1>
+                    <h2 className="font-sans text-xl font-bold text-white leading-tight">
+                      ARCHITECTE DE<br />
+                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">SOLUTIONS AUGMENTÉES</span>
+                    </h2>
+                    <p className="font-mono text-sm text-[#00d1ff] leading-relaxed">
+                      Spécialiste en économie, gestion et intelligence artificielle
+                    </p>
+                    <div className="flex flex-col gap-3 mt-3 pt-4 border-t border-white/10">
+                      <p className="font-mono text-[10px] text-gray-500 tracking-widest">CONTACTS DIRECTS</p>
+                      <a href="https://wa.me/213776371454" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-gray-300 hover:text-[#00d1ff] transition-colors font-mono text-sm">
+                        <MessageCircle size={16} className="text-[#00d1ff]" /> +213 776 37 14 54
+                      </a>
+                      <a href="mailto:sif.takfa@gmail.com" className="flex items-center gap-3 text-gray-300 hover:text-[#00d1ff] transition-colors font-mono text-sm">
+                        <Mail size={16} className="text-[#00d1ff]" /> sif.takfa@gmail.com
+                      </a>
+                      <a href="https://instagram.com/Takfa015" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-gray-300 hover:text-[#00d1ff] transition-colors font-mono text-sm">
+                        <Instagram size={16} className="text-[#00d1ff]" /> @Takfa015
+                      </a>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* PROJETS MOBILE */}
+                {activeSection === 'PROJETS' && (
+                  <motion.div key="PROJETS-mobile" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.4 }}>
+                    <ProjectsUI contents={currentContents} isSyncing={isSyncing} currentFolderName={currentFolderName} isRoot={currentFolderId === FOLDER_ID} onFolderClick={handleFolderClick} onBackClick={handleBackClick} playHover={playHover} playClick={playClick} playTransition={playTransition} />
+                  </motion.div>
+                )}
+
+                {/* COMPETENCES MOBILE */}
+                {activeSection === 'COMPETENCES' && (
+                  <motion.div key="COMPETENCES-mobile" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.4 }} className="flex flex-col gap-4">
+                    <h2 className="font-mono text-sm text-white tracking-widest">COMPÉTENCES & PARCOURS</h2>
+                    {skillsData.map((category) => {
+                      const Icon = category.icon;
+                      return (
+                        <div key={category.id} className="rounded-xl border border-white/10 bg-black/60 p-4 backdrop-blur-md">
+                          <div className="flex items-center gap-3 mb-3">
+                            <div className="p-1.5 rounded-lg bg-white/5 text-[#00d1ff]"><Icon size={18} /></div>
+                            <h3 className="font-mono text-xs font-bold text-white tracking-wider leading-tight">{category.title}</h3>
+                          </div>
+                          <ul className="flex flex-col gap-2 pl-2">
+                            {category.items.map((item, idx) => (
+                              <li key={idx} className="flex items-start gap-2">
+                                <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-[#00d1ff]/60" />
+                                <p className="font-sans text-xs text-gray-300 leading-relaxed">
+                                  <strong className="text-white">{item.label}</strong>
+                                  {item.desc ? ` : ${item.desc}` : ''}
+                                </p>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      );
+                    })}
+                    <div className="mt-2 pb-4">
+                      <h3 className="font-mono text-xs text-white mb-3 tracking-widest">TECHNOLOGIES_LOG //</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {['Python', 'Next.js', 'Tailwind CSS', 'Firebase', 'AI Video Generation', 'Prompt Engineering', 'Office 365'].map((tech, idx) => (
+                          <span key={idx} className="font-mono text-[10px] text-gray-300 border border-white/20 bg-black/40 px-3 py-1 rounded-sm">{tech}</span>
+                        ))}
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* TRANSMISSION MOBILE */}
+                {activeSection === 'TRANSMISSION' && (
+                  <motion.div key="TRANSMISSION-mobile" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.4 }} className="flex flex-col gap-5">
+                    <h2 className="font-mono text-sm text-white tracking-widest">CANAL DE TRANSMISSION</h2>
+                    <div className="flex flex-col gap-3 font-mono text-sm text-gray-300 p-4 rounded-xl border border-white/10 bg-black/60 backdrop-blur-md">
+                      <a href="https://wa.me/213776371454" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-[#00d1ff] transition-colors">
+                        <MessageCircle size={16} className="text-[#00d1ff]" /> +213 776 37 14 54
+                      </a>
+                      <a href="mailto:sif.takfa@gmail.com" className="flex items-center gap-3 hover:text-[#00d1ff] transition-colors">
+                        <Mail size={16} className="text-[#00d1ff]" /> sif.takfa@gmail.com
+                      </a>
+                      <a href="https://instagram.com/Takfa015" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-[#00d1ff] transition-colors">
+                        <Instagram size={16} className="text-[#00d1ff]" /> @Takfa015
+                      </a>
+                    </div>
+                    <div className="rounded-xl border border-white/10 bg-black/60 p-4 backdrop-blur-md relative overflow-hidden">
+                      <div className="absolute top-0 left-0 h-6 w-6 border-t-2 border-l-2 border-[#00d1ff]/50" />
+                      <div className="absolute bottom-0 right-0 h-6 w-6 border-b-2 border-r-2 border-[#00d1ff]/50" />
+                      <div className="flex flex-col gap-5">
+                        <div className="relative">
+                          <input type="text" placeholder="IDENTIFIANT (Nom)" className="peer w-full rounded-none border-b border-white/20 bg-transparent py-3 font-mono text-sm text-white placeholder-transparent focus:border-[#00d1ff] focus:outline-none transition-colors" />
+                          <label className="absolute left-0 -top-3.5 font-mono text-[10px] text-[#00d1ff] transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-500 peer-focus:-top-3.5 peer-focus:text-[10px] peer-focus:text-[#00d1ff]">IDENTIFIANT (Nom)</label>
+                        </div>
+                        <div className="relative mt-2">
+                          <input type="text" placeholder="RÉSEAU / EMAIL" className="peer w-full rounded-none border-b border-white/20 bg-transparent py-3 font-mono text-sm text-white placeholder-transparent focus:border-[#00d1ff] focus:outline-none transition-colors" />
+                          <label className="absolute left-0 -top-3.5 font-mono text-[10px] text-[#00d1ff] transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-500 peer-focus:-top-3.5 peer-focus:text-[10px] peer-focus:text-[#00d1ff]">RÉSEAU / EMAIL</label>
+                        </div>
+                        <div className="relative mt-2">
+                          <textarea placeholder="MESSAGE_PAYLOAD" rows={4} className="peer w-full rounded-none border-b border-white/20 bg-transparent py-3 font-mono text-sm text-white placeholder-transparent focus:border-[#00d1ff] focus:outline-none transition-colors resize-none" />
+                          <label className="absolute left-0 -top-3.5 font-mono text-[10px] text-[#00d1ff] transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-500 peer-focus:-top-3.5 peer-focus:text-[10px] peer-focus:text-[#00d1ff]">MESSAGE_PAYLOAD</label>
+                        </div>
+                        <button onClick={playClick} className="group relative mt-4 overflow-hidden border border-[#00d1ff]/50 bg-[#00d1ff]/10 py-3 font-mono text-xs tracking-widest text-[#00d1ff] transition-all active:bg-[#00d1ff]/20">
+                          <span className="relative z-10">INITIALISER LE TRANSFERT</span>
+                          <div className="absolute inset-0 h-full w-0 bg-[#00d1ff]/20 transition-all duration-300 ease-out group-hover:w-full" />
+                        </button>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+              </AnimatePresence>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
     </main>
   );
 }
