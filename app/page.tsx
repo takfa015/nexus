@@ -1151,158 +1151,341 @@ export default function NexusPortfolio() {
       </motion.div>
 
       {/* ===================================================== */}
-      {/* MOBILE LAYOUT — visible uniquement en dessous de md   */}
+      {/* MOBILE LAYOUT — Fullscreen swipe par section          */}
       {/* ===================================================== */}
       <AnimatePresence>
         {isBooted && (
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="md:hidden fixed inset-0 z-30 overflow-y-auto pointer-events-auto"
-          >
-            {/* Barre de navigation mobile sticky */}
-            <div className="sticky top-0 z-50 flex items-center justify-between px-4 py-3 bg-black/85 backdrop-blur-md border-b border-[#00d1ff]/20">
-              <span className="font-mono text-xs text-[#00d1ff] tracking-widest">NEXUS_OS</span>
-              <div className="flex items-center gap-1">
-                {navItems.map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => { playClick(); setActiveSection(item.id); }}
-                    className={`px-2 py-1 font-mono text-[9px] tracking-widest rounded transition-all ${
-                      activeSection === item.id
-                        ? 'bg-[#00d1ff]/20 text-[#00d1ff] border border-[#00d1ff]/60'
-                        : 'text-gray-400 border border-transparent'
-                    }`}
-                  >
-                    {item.id}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Contenu des sections */}
-            <div className="px-4 pt-6 pb-32 min-h-screen">
-              <AnimatePresence mode="wait">
-
-                {/* HOME MOBILE */}
-                {activeSection === 'HOME' && (
-                  <motion.div key="HOME-mobile" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.4 }} className="flex flex-col gap-5 pt-2">
-                    <h1 className="font-sans text-3xl font-bold tracking-widest text-white drop-shadow-[0_0_10px_rgba(0,209,255,0.8)] leading-tight uppercase">
-                      SI FODIL<br />TAKFARINAS
-                    </h1>
-                    <h2 className="font-sans text-xl font-bold text-white leading-tight">
-                      ARCHITECTE DE<br />
-                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">SOLUTIONS AUGMENTÉES</span>
-                    </h2>
-                    <p className="font-mono text-sm text-[#00d1ff] leading-relaxed">
-                      Spécialiste en économie, gestion et intelligence artificielle
-                    </p>
-                    <div className="flex flex-col gap-3 mt-3 pt-4 border-t border-white/10">
-                      <p className="font-mono text-[10px] text-gray-500 tracking-widest">CONTACTS DIRECTS</p>
-                      <a href="https://wa.me/213776371454" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-gray-300 hover:text-[#00d1ff] transition-colors font-mono text-sm">
-                        <MessageCircle size={16} className="text-[#00d1ff]" /> +213 776 37 14 54
-                      </a>
-                      <a href="mailto:sif.takfa@gmail.com" className="flex items-center gap-3 text-gray-300 hover:text-[#00d1ff] transition-colors font-mono text-sm">
-                        <Mail size={16} className="text-[#00d1ff]" /> sif.takfa@gmail.com
-                      </a>
-                      <a href="https://instagram.com/Takfa015" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-gray-300 hover:text-[#00d1ff] transition-colors font-mono text-sm">
-                        <Instagram size={16} className="text-[#00d1ff]" /> @Takfa015
-                      </a>
-                    </div>
-                  </motion.div>
-                )}
-
-                {/* PROJETS MOBILE */}
-                {activeSection === 'PROJETS' && (
-                  <motion.div key="PROJETS-mobile" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.4 }}>
-                    <ProjectsUI contents={currentContents} isSyncing={isSyncing} currentFolderName={currentFolderName} isRoot={currentFolderId === FOLDER_ID} onFolderClick={handleFolderClick} onBackClick={handleBackClick} playHover={playHover} playClick={playClick} playTransition={playTransition} />
-                  </motion.div>
-                )}
-
-                {/* COMPETENCES MOBILE */}
-                {activeSection === 'COMPETENCES' && (
-                  <motion.div key="COMPETENCES-mobile" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.4 }} className="flex flex-col gap-4">
-                    <h2 className="font-mono text-sm text-white tracking-widest">COMPÉTENCES & PARCOURS</h2>
-                    {skillsData.map((category) => {
-                      const Icon = category.icon;
-                      return (
-                        <div key={category.id} className="rounded-xl border border-white/10 bg-black/60 p-4 backdrop-blur-md">
-                          <div className="flex items-center gap-3 mb-3">
-                            <div className="p-1.5 rounded-lg bg-white/5 text-[#00d1ff]"><Icon size={18} /></div>
-                            <h3 className="font-mono text-xs font-bold text-white tracking-wider leading-tight">{category.title}</h3>
-                          </div>
-                          <ul className="flex flex-col gap-2 pl-2">
-                            {category.items.map((item, idx) => (
-                              <li key={idx} className="flex items-start gap-2">
-                                <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-[#00d1ff]/60" />
-                                <p className="font-sans text-xs text-gray-300 leading-relaxed">
-                                  <strong className="text-white">{item.label}</strong>
-                                  {item.desc ? ` : ${item.desc}` : ''}
-                                </p>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      );
-                    })}
-                    <div className="mt-2 pb-4">
-                      <h3 className="font-mono text-xs text-white mb-3 tracking-widest">TECHNOLOGIES_LOG //</h3>
-                      <div className="flex flex-wrap gap-2">
-                        {['Python', 'Next.js', 'Tailwind CSS', 'Firebase', 'AI Video Generation', 'Prompt Engineering', 'Office 365'].map((tech, idx) => (
-                          <span key={idx} className="font-mono text-[10px] text-gray-300 border border-white/20 bg-black/40 px-3 py-1 rounded-sm">{tech}</span>
-                        ))}
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-
-                {/* TRANSMISSION MOBILE */}
-                {activeSection === 'TRANSMISSION' && (
-                  <motion.div key="TRANSMISSION-mobile" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.4 }} className="flex flex-col gap-5">
-                    <h2 className="font-mono text-sm text-white tracking-widest">CANAL DE TRANSMISSION</h2>
-                    <div className="flex flex-col gap-3 font-mono text-sm text-gray-300 p-4 rounded-xl border border-white/10 bg-black/60 backdrop-blur-md">
-                      <a href="https://wa.me/213776371454" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-[#00d1ff] transition-colors">
-                        <MessageCircle size={16} className="text-[#00d1ff]" /> +213 776 37 14 54
-                      </a>
-                      <a href="mailto:sif.takfa@gmail.com" className="flex items-center gap-3 hover:text-[#00d1ff] transition-colors">
-                        <Mail size={16} className="text-[#00d1ff]" /> sif.takfa@gmail.com
-                      </a>
-                      <a href="https://instagram.com/Takfa015" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-[#00d1ff] transition-colors">
-                        <Instagram size={16} className="text-[#00d1ff]" /> @Takfa015
-                      </a>
-                    </div>
-                    <div className="rounded-xl border border-white/10 bg-black/60 p-4 backdrop-blur-md relative overflow-hidden">
-                      <div className="absolute top-0 left-0 h-6 w-6 border-t-2 border-l-2 border-[#00d1ff]/50" />
-                      <div className="absolute bottom-0 right-0 h-6 w-6 border-b-2 border-r-2 border-[#00d1ff]/50" />
-                      <div className="flex flex-col gap-5">
-                        <div className="relative">
-                          <input type="text" placeholder="IDENTIFIANT (Nom)" className="peer w-full rounded-none border-b border-white/20 bg-transparent py-3 font-mono text-sm text-white placeholder-transparent focus:border-[#00d1ff] focus:outline-none transition-colors" />
-                          <label className="absolute left-0 -top-3.5 font-mono text-[10px] text-[#00d1ff] transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-500 peer-focus:-top-3.5 peer-focus:text-[10px] peer-focus:text-[#00d1ff]">IDENTIFIANT (Nom)</label>
-                        </div>
-                        <div className="relative mt-2">
-                          <input type="text" placeholder="RÉSEAU / EMAIL" className="peer w-full rounded-none border-b border-white/20 bg-transparent py-3 font-mono text-sm text-white placeholder-transparent focus:border-[#00d1ff] focus:outline-none transition-colors" />
-                          <label className="absolute left-0 -top-3.5 font-mono text-[10px] text-[#00d1ff] transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-500 peer-focus:-top-3.5 peer-focus:text-[10px] peer-focus:text-[#00d1ff]">RÉSEAU / EMAIL</label>
-                        </div>
-                        <div className="relative mt-2">
-                          <textarea placeholder="MESSAGE_PAYLOAD" rows={4} className="peer w-full rounded-none border-b border-white/20 bg-transparent py-3 font-mono text-sm text-white placeholder-transparent focus:border-[#00d1ff] focus:outline-none transition-colors resize-none" />
-                          <label className="absolute left-0 -top-3.5 font-mono text-[10px] text-[#00d1ff] transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-500 peer-focus:-top-3.5 peer-focus:text-[10px] peer-focus:text-[#00d1ff]">MESSAGE_PAYLOAD</label>
-                        </div>
-                        <button onClick={playClick} className="group relative mt-4 overflow-hidden border border-[#00d1ff]/50 bg-[#00d1ff]/10 py-3 font-mono text-xs tracking-widest text-[#00d1ff] transition-all active:bg-[#00d1ff]/20">
-                          <span className="relative z-10">INITIALISER LE TRANSFERT</span>
-                          <div className="absolute inset-0 h-full w-0 bg-[#00d1ff]/20 transition-all duration-300 ease-out group-hover:w-full" />
-                        </button>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-
-              </AnimatePresence>
-            </div>
-          </motion.div>
+          <MobileLayout
+            activeSection={activeSection}
+            setActiveSection={setActiveSection}
+            currentContents={currentContents}
+            isSyncing={isSyncing}
+            currentFolderName={currentFolderName}
+            currentFolderId={currentFolderId}
+            folderHistory={folderHistory}
+            handleFolderClick={handleFolderClick}
+            handleBackClick={handleBackClick}
+            playClick={playClick}
+            playHover={playHover}
+            playTransition={playTransition}
+            skillsData={skillsData}
+            navItems={navItems}
+            FOLDER_ID={FOLDER_ID}
+          />
         )}
       </AnimatePresence>
 
     </main>
+  );
+}
+
+// =====================================================
+// MOBILE FULLSCREEN SWIPE COMPONENT
+// =====================================================
+function MobileLayout({
+  activeSection, setActiveSection,
+  currentContents, isSyncing, currentFolderName, currentFolderId, folderHistory,
+  handleFolderClick, handleBackClick,
+  playClick, playHover, playTransition,
+  skillsData, navItems, FOLDER_ID
+}: any) {
+  const sectionIds = navItems.map((n: any) => n.id);
+  const currentIndex = sectionIds.indexOf(activeSection);
+
+  // Swipe touch handling
+  const touchStart = useRef<number | null>(null);
+  const touchEnd = useRef<number | null>(null);
+  const MIN_SWIPE = 50;
+
+  const goNext = useCallback(() => {
+    if (currentIndex < sectionIds.length - 1) {
+      playClick();
+      setActiveSection(sectionIds[currentIndex + 1]);
+    }
+  }, [currentIndex, sectionIds, playClick, setActiveSection]);
+
+  const goPrev = useCallback(() => {
+    if (currentIndex > 0) {
+      playClick();
+      setActiveSection(sectionIds[currentIndex - 1]);
+    }
+  }, [currentIndex, sectionIds, playClick, setActiveSection]);
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStart.current = e.targetTouches[0].clientX;
+    touchEnd.current = null;
+  };
+  const onTouchMove = (e: React.TouchEvent) => {
+    touchEnd.current = e.targetTouches[0].clientX;
+  };
+  const onTouchEnd = () => {
+    if (!touchStart.current || !touchEnd.current) return;
+    const delta = touchStart.current - touchEnd.current;
+    if (Math.abs(delta) > MIN_SWIPE) {
+      delta > 0 ? goNext() : goPrev();
+    }
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="md:hidden fixed inset-0 z-30 pointer-events-auto flex flex-col"
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
+    >
+      {/* ---- TOP BAR ---- */}
+      <div className="shrink-0 flex items-center justify-between px-5 py-4 bg-black/80 backdrop-blur-md border-b border-[#00d1ff]/20 z-50">
+        <span className="font-mono text-xs text-[#00d1ff] tracking-[0.3em] drop-shadow-[0_0_6px_rgba(0,209,255,0.6)]">
+          NEXUS_OS
+        </span>
+        {/* Dots indicator */}
+        <div className="flex items-center gap-2">
+          {sectionIds.map((id: string, i: number) => (
+            <button
+              key={id}
+              onClick={() => { playClick(); setActiveSection(id); }}
+              className={`transition-all duration-300 rounded-full ${
+                id === activeSection
+                  ? 'w-5 h-1.5 bg-[#00d1ff] shadow-[0_0_6px_rgba(0,209,255,0.9)]'
+                  : 'w-1.5 h-1.5 bg-white/20'
+              }`}
+            />
+          ))}
+        </div>
+        <span className="font-mono text-[10px] text-gray-500 tracking-widest">
+          {String(currentIndex + 1).padStart(2, '0')}/{sectionIds.length}
+        </span>
+      </div>
+
+      {/* ---- FULLSCREEN SECTION CONTENT ---- */}
+      <div className="flex-1 relative overflow-hidden">
+        <AnimatePresence mode="wait" custom={currentIndex}>
+          <motion.div
+            key={activeSection}
+            custom={currentIndex}
+            initial={{ opacity: 0, x: 60, filter: 'blur(6px)' }}
+            animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+            exit={{ opacity: 0, x: -60, filter: 'blur(6px)' }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute inset-0 overflow-y-auto"
+          >
+
+            {/* ---- HOME ---- */}
+            {activeSection === 'HOME' && (
+              <div className="flex flex-col justify-between h-full px-6 py-8 min-h-full">
+                {/* Nom + titre */}
+                <div className="flex flex-col gap-5 pt-4">
+                  <div className="font-mono text-[10px] text-[#00d1ff]/60 tracking-[0.4em]">// IDENTITÉ</div>
+                  <h1 className="font-sans text-4xl font-bold tracking-widest text-white leading-tight uppercase drop-shadow-[0_0_15px_rgba(0,209,255,0.4)]">
+                    SI FODIL<br />TAKFARINAS
+                  </h1>
+                  <div className="w-12 h-[2px] bg-[#00d1ff] shadow-[0_0_8px_rgba(0,209,255,0.8)]" />
+                  <h2 className="font-sans text-lg font-bold text-white leading-snug">
+                    ARCHITECTE DE<br />
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00d1ff] to-white/60">
+                      SOLUTIONS AUGMENTÉES
+                    </span>
+                  </h2>
+                  <p className="font-mono text-sm text-gray-400 leading-relaxed max-w-xs">
+                    Spécialiste en économie, gestion<br />et intelligence artificielle
+                  </p>
+                </div>
+
+                {/* Contacts */}
+                <div className="flex flex-col gap-4 pb-4">
+                  <div className="font-mono text-[10px] text-[#00d1ff]/60 tracking-[0.4em]">// CONTACTS</div>
+                  <a href="https://wa.me/213776371454" target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-4 p-3 rounded-xl border border-white/10 bg-black/40 backdrop-blur-sm active:border-[#00d1ff]/60 transition-all">
+                    <MessageCircle size={18} className="text-[#00d1ff] shrink-0" />
+                    <span className="font-mono text-xs text-gray-300">+213 776 37 14 54</span>
+                  </a>
+                  <a href="mailto:sif.takfa@gmail.com"
+                    className="flex items-center gap-4 p-3 rounded-xl border border-white/10 bg-black/40 backdrop-blur-sm active:border-[#00d1ff]/60 transition-all">
+                    <Mail size={18} className="text-[#00d1ff] shrink-0" />
+                    <span className="font-mono text-xs text-gray-300">sif.takfa@gmail.com</span>
+                  </a>
+                  <a href="https://instagram.com/Takfa015" target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-4 p-3 rounded-xl border border-white/10 bg-black/40 backdrop-blur-sm active:border-[#00d1ff]/60 transition-all">
+                    <Instagram size={18} className="text-[#00d1ff] shrink-0" />
+                    <span className="font-mono text-xs text-gray-300">@Takfa015</span>
+                  </a>
+                </div>
+
+                {/* Swipe hint */}
+                <div className="flex items-center justify-center gap-2 pb-2 opacity-40">
+                  <span className="text-xs font-mono text-gray-500 tracking-widest">SWIPE POUR NAVIGUER</span>
+                  <span className="text-[#00d1ff] text-sm">→</span>
+                </div>
+              </div>
+            )}
+
+            {/* ---- PROJETS ---- */}
+            {activeSection === 'PROJETS' && (
+              <div className="h-full">
+                <ProjectsUI
+                  contents={currentContents}
+                  isSyncing={isSyncing}
+                  currentFolderName={currentFolderName}
+                  isRoot={currentFolderId === FOLDER_ID}
+                  onFolderClick={handleFolderClick}
+                  onBackClick={handleBackClick}
+                  playHover={playHover}
+                  playClick={playClick}
+                  playTransition={playTransition}
+                />
+              </div>
+            )}
+
+            {/* ---- COMPÉTENCES ---- */}
+            {activeSection === 'COMPETENCES' && (
+              <div className="px-5 py-6 flex flex-col gap-5 pb-24">
+                <div className="font-mono text-[10px] text-[#00d1ff]/60 tracking-[0.4em]">// COMPÉTENCES & PARCOURS</div>
+
+                {skillsData.map((category: any) => {
+                  const Icon = category.icon;
+                  return (
+                    <div key={category.id} className="rounded-2xl border border-white/10 bg-black/50 backdrop-blur-md overflow-hidden">
+                      {/* Header catégorie */}
+                      <div className="flex items-center gap-3 px-4 py-3 border-b border-white/10 bg-white/5">
+                        <Icon size={16} className="text-[#00d1ff] shrink-0" />
+                        <h3 className="font-mono text-[10px] font-bold text-white tracking-wider leading-tight">{category.title}</h3>
+                      </div>
+                      {/* Items */}
+                      <div className="flex flex-col divide-y divide-white/5">
+                        {category.items.map((item: any, idx: number) => (
+                          <div key={idx} className="px-4 py-3 flex items-start gap-3">
+                            <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-[#00d1ff]/50" />
+                            <p className="font-sans text-xs text-gray-400 leading-relaxed">
+                              <strong className="text-white/90 font-medium">{item.label}</strong>
+                              {item.desc ? <span className="text-gray-500"> — {item.desc}</span> : ''}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+
+                {/* Tech tags */}
+                <div className="rounded-2xl border border-white/10 bg-black/50 backdrop-blur-md p-4">
+                  <div className="font-mono text-[10px] text-[#00d1ff]/60 tracking-[0.4em] mb-3">// STACK</div>
+                  <div className="flex flex-wrap gap-2">
+                    {['Python', 'Next.js', 'Tailwind', 'Firebase', 'AI Video', 'Prompt Eng.', 'Office 365'].map((tech, idx) => (
+                      <span key={idx} className="font-mono text-[10px] text-gray-400 border border-white/15 bg-white/5 px-3 py-1 rounded-full">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ---- TRANSMISSION ---- */}
+            {activeSection === 'TRANSMISSION' && (
+              <div className="px-5 py-6 flex flex-col gap-5 pb-24">
+                <div className="font-mono text-[10px] text-[#00d1ff]/60 tracking-[0.4em]">// CANAL DE TRANSMISSION</div>
+
+                {/* Liens directs */}
+                <div className="flex flex-col gap-3">
+                  <a href="https://wa.me/213776371454" target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-4 p-4 rounded-2xl border border-white/10 bg-black/50 backdrop-blur-md active:border-[#00d1ff]/60 active:bg-[#00d1ff]/10 transition-all">
+                    <div className="w-9 h-9 rounded-xl bg-[#00d1ff]/10 border border-[#00d1ff]/30 flex items-center justify-center shrink-0">
+                      <MessageCircle size={18} className="text-[#00d1ff]" />
+                    </div>
+                    <div>
+                      <p className="font-mono text-[10px] text-[#00d1ff]/60 tracking-widest">WHATSAPP</p>
+                      <p className="font-mono text-sm text-white">+213 776 37 14 54</p>
+                    </div>
+                  </a>
+                  <a href="mailto:sif.takfa@gmail.com"
+                    className="flex items-center gap-4 p-4 rounded-2xl border border-white/10 bg-black/50 backdrop-blur-md active:border-[#00d1ff]/60 active:bg-[#00d1ff]/10 transition-all">
+                    <div className="w-9 h-9 rounded-xl bg-[#00d1ff]/10 border border-[#00d1ff]/30 flex items-center justify-center shrink-0">
+                      <Mail size={18} className="text-[#00d1ff]" />
+                    </div>
+                    <div>
+                      <p className="font-mono text-[10px] text-[#00d1ff]/60 tracking-widest">EMAIL</p>
+                      <p className="font-mono text-sm text-white">sif.takfa@gmail.com</p>
+                    </div>
+                  </a>
+                  <a href="https://instagram.com/Takfa015" target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-4 p-4 rounded-2xl border border-white/10 bg-black/50 backdrop-blur-md active:border-[#00d1ff]/60 active:bg-[#00d1ff]/10 transition-all">
+                    <div className="w-9 h-9 rounded-xl bg-[#00d1ff]/10 border border-[#00d1ff]/30 flex items-center justify-center shrink-0">
+                      <Instagram size={18} className="text-[#00d1ff]" />
+                    </div>
+                    <div>
+                      <p className="font-mono text-[10px] text-[#00d1ff]/60 tracking-widest">INSTAGRAM</p>
+                      <p className="font-mono text-sm text-white">@Takfa015</p>
+                    </div>
+                  </a>
+                </div>
+
+                {/* Formulaire */}
+                <div className="rounded-2xl border border-white/10 bg-black/50 backdrop-blur-md p-5 relative overflow-hidden">
+                  <div className="absolute top-0 left-0 h-6 w-6 border-t-2 border-l-2 border-[#00d1ff]/40" />
+                  <div className="absolute bottom-0 right-0 h-6 w-6 border-b-2 border-r-2 border-[#00d1ff]/40" />
+                  <div className="font-mono text-[10px] text-[#00d1ff]/60 tracking-[0.4em] mb-5">// MESSAGE</div>
+                  <div className="flex flex-col gap-5">
+                    <div className="relative">
+                      <input type="text" placeholder="IDENTIFIANT (Nom)"
+                        className="peer w-full rounded-none border-b border-white/20 bg-transparent py-3 font-mono text-sm text-white placeholder-transparent focus:border-[#00d1ff] focus:outline-none transition-colors" />
+                      <label className="absolute left-0 -top-3.5 font-mono text-[10px] text-[#00d1ff] transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-500 peer-focus:-top-3.5 peer-focus:text-[10px] peer-focus:text-[#00d1ff]">
+                        IDENTIFIANT (Nom)
+                      </label>
+                    </div>
+                    <div className="relative mt-2">
+                      <input type="text" placeholder="RÉSEAU / EMAIL"
+                        className="peer w-full rounded-none border-b border-white/20 bg-transparent py-3 font-mono text-sm text-white placeholder-transparent focus:border-[#00d1ff] focus:outline-none transition-colors" />
+                      <label className="absolute left-0 -top-3.5 font-mono text-[10px] text-[#00d1ff] transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-500 peer-focus:-top-3.5 peer-focus:text-[10px] peer-focus:text-[#00d1ff]">
+                        RÉSEAU / EMAIL
+                      </label>
+                    </div>
+                    <div className="relative mt-2">
+                      <textarea placeholder="MESSAGE_PAYLOAD" rows={3}
+                        className="peer w-full rounded-none border-b border-white/20 bg-transparent py-3 font-mono text-sm text-white placeholder-transparent focus:border-[#00d1ff] focus:outline-none transition-colors resize-none" />
+                      <label className="absolute left-0 -top-3.5 font-mono text-[10px] text-[#00d1ff] transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-500 peer-focus:-top-3.5 peer-focus:text-[10px] peer-focus:text-[#00d1ff]">
+                        MESSAGE_PAYLOAD
+                      </label>
+                    </div>
+                    <button className="mt-3 relative overflow-hidden border border-[#00d1ff]/50 bg-[#00d1ff]/10 py-3 font-mono text-xs tracking-[0.2em] text-[#00d1ff] active:bg-[#00d1ff]/30 transition-all rounded-sm">
+                      [ INITIALISER LE TRANSFERT ]
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* ---- BOTTOM NAV BAR ---- */}
+      <div className="shrink-0 flex items-stretch bg-black/85 backdrop-blur-md border-t border-[#00d1ff]/20 z-50">
+        {navItems.map((item: any, i: number) => {
+          const isActive = activeSection === item.id;
+          const icons = [Terminal, Folder, Brain, MessageCircle];
+          const Icon = icons[i];
+          return (
+            <button
+              key={item.id}
+              onClick={() => { playClick(); setActiveSection(item.id); }}
+              className={`flex-1 flex flex-col items-center justify-center gap-1 py-3 transition-all relative ${
+                isActive ? 'text-[#00d1ff]' : 'text-gray-500'
+              }`}
+            >
+              {isActive && (
+                <motion.div
+                  layoutId="tab-indicator"
+                  className="absolute top-0 inset-x-0 h-[2px] bg-[#00d1ff] shadow-[0_0_8px_rgba(0,209,255,0.8)]"
+                />
+              )}
+              <Icon size={18} strokeWidth={isActive ? 2 : 1.5} />
+              <span className="font-mono text-[9px] tracking-widest">{item.id}</span>
+            </button>
+          );
+        })}
+      </div>
+    </motion.div>
   );
 }
