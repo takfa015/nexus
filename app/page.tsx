@@ -966,7 +966,7 @@ export default function NexusPortfolio() {
         animate="visible"
       >
         {/* Left Column: Header, Nav, Footer */}
-        <div className="flex h-full flex-col justify-between w-full md:w-1/3 min-w-[280px] relative z-[100] pointer-events-none">
+        <div className="hidden md:flex h-full flex-col justify-between w-full md:w-1/3 min-w-[280px] relative z-[100] pointer-events-none">
           {/* Header (Top Left) */}
           <motion.header variants={itemVariants} className="pointer-events-auto w-fit">
             <h1 className="font-mono text-xl font-bold tracking-widest text-white drop-shadow-[0_0_10px_rgba(0,209,255,0.8)]">
@@ -1020,7 +1020,7 @@ export default function NexusPortfolio() {
         {/* Contact Dock (Bottom Center) */}
         <motion.div
           variants={itemVariants}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-[100] flex items-center gap-8 pointer-events-auto"
+          className="hidden md:flex absolute bottom-8 left-1/2 -translate-x-1/2 z-[100] items-center gap-8 pointer-events-auto"
         >
           <a href="https://wa.me/213776371454" target="_blank" rel="noopener noreferrer" className="text-white hover:text-[#00d1ff] transition-all duration-300 hover:scale-110 hover:animate-pulse drop-shadow-[0_0_5px_rgba(255,255,255,0.5)] hover:drop-shadow-[0_0_10px_rgba(0,209,255,0.8)]">
             <MessageCircle size={24} />
@@ -1037,7 +1037,7 @@ export default function NexusPortfolio() {
         <motion.button
           variants={itemVariants}
           onClick={toggleAudio}
-          className="fixed bottom-8 right-8 md:bottom-16 md:right-16 z-[9999] flex items-center gap-2 font-mono text-xs tracking-widest text-gray-400 hover:text-[#00d1ff] transition-colors pointer-events-auto bg-black/50 px-4 py-2 rounded-full border border-white/10 hover:border-[#00d1ff]/50 backdrop-blur-md"
+          className="hidden md:flex fixed bottom-8 right-8 md:bottom-16 md:right-16 z-[9999] items-center gap-2 font-mono text-xs tracking-widest text-gray-400 hover:text-[#00d1ff] transition-colors pointer-events-auto bg-black/50 px-4 py-2 rounded-full border border-white/10 hover:border-[#00d1ff]/50 backdrop-blur-md"
         >
           <span className={`h-2 w-2 rounded-full ${isAudioEnabled ? 'bg-[#00d1ff] shadow-[0_0_8px_rgba(0,209,255,0.8)]' : 'bg-gray-600'}`} />
           AUDIO: {isAudioEnabled ? 'ON' : 'OFF'}
